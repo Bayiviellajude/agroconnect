@@ -1,0 +1,276 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0A0F0D;
+  --foreground: #E8EDE6;
+  --primary: #1B4332;
+  --primary-foreground: #FAFAF8;
+  --secondary: #2D6A4F;
+  --secondary-foreground: #FAFAF8;
+  --accent: #D4A017;
+  --accent-foreground: #0A0F0D;
+  --muted: #141A17;
+  --muted-foreground: #8A9E8F;
+  --card: #111711;
+  --card-foreground: #E8EDE6;
+  --border: #1E2E22;
+  --input: #1E2E22;
+  --ring: #D4A017;
+  --radius: 0.5rem;
+  --font-sans: var(--font-plus-jakarta-sans), sans-serif;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+  }
+}
+
+@layer utilities {
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Beam border animations */
+.beam-border-v {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  z-index: 10;
+}
+.beam-border-v::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(to bottom, transparent, #D4A017, transparent);
+  transform: translateY(-100%);
+  animation: beam-drop 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  opacity: 0.6;
+}
+.beam-border-h {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  z-index: 10;
+}
+.beam-border-h::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(to right, transparent, #D4A017, transparent);
+  transform: translateX(-100%);
+  animation: beam-slide 7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation-delay: 2.5s;
+  opacity: 0.6;
+}
+
+@keyframes beam-drop {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+@keyframes beam-slide {
+  0%   { transform: translateX(-100%); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+
+/* Fade slide in animation */
+@keyframes fadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+}
+
+.animate-fade-slide-in {
+  animation: fadeSlideIn 0.8s ease-out forwards;
+}
+
+.animate-on-scroll {
+  opacity: 0;
+}
+.animate-on-scroll.animate {
+  animation: fadeSlideIn 0.8s ease-out forwards;
+}
+
+/* Stat item */
+.stat-item {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.5;
+}
+.stat-item:hover { opacity: 0.8; }
+.stat-item.active { opacity: 1; }
+.stat-item.active .stat-value {
+  color: #D4A017;
+  text-shadow: 0 0 20px rgba(212, 160, 23, 0.3);
+}
+
+/* Image transition */
+.main-image-transition {
+  transition: opacity 0.5s ease-in-out, transform 0.7s ease-out;
+}
+.fade-out-img {
+  opacity: 0 !important;
+  transform: scale(1.05);
+}
+
+/* Animated CTA button */
+.agro-btn-wrapper {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.8rem 1.2rem;
+  user-select: none;
+  --dot-size: 5px;
+  --line-weight: 1px;
+  --animation-speed: 0.35s;
+  --dot-color: #D4A017;
+  --line-color: #D4A017;
+  --grid-color: rgba(255,255,255,0.2);
+}
+.agro-btn-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border-radius: inherit;
+  pointer-events: none;
+  background-color: #0000;
+  background-image: repeating-linear-gradient(45deg, var(--grid-color) 0 1px, transparent 2px 5px);
+  opacity: 0;
+  z-index: -1;
+}
+.agro-btn-wrapper:has(.agro-btn:hover)::after {
+  animation: opacity-anim calc(var(--animation-speed) * 4) ease-in-out forwards;
+}
+@keyframes opacity-anim {
+  80% { opacity: 0; }
+  100% { opacity: 1; }
+}
+.agro-btn {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.9rem 1.6rem;
+  background-color: transparent;
+  border: 1px solid var(--grid-color);
+  color: rgba(255,255,255,0.9);
+  font-family: var(--font-sans);
+  letter-spacing: -0.01em;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, letter-spacing 0.2s ease-in-out, background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+.agro-btn:hover {
+  background-color: #D4A017;
+  color: #0A0F0D;
+  border-color: #D4A017;
+  transform: scale(1.04);
+  letter-spacing: 0.05em;
+}
+.agro-btn-line {
+  position: absolute;
+  transition: all 0.3s ease-in-out;
+}
+.agro-btn-line.horizontal {
+  height: var(--line-weight);
+  width: 100%;
+  background-image: repeating-linear-gradient(90deg, #0000 0 calc(var(--line-weight)*2), var(--line-color) calc(var(--line-weight)*2) calc(var(--line-weight)*4));
+}
+.agro-btn-line.vertical {
+  width: var(--line-weight);
+  height: 100%;
+  background-image: repeating-linear-gradient(0deg, #0000 0 calc(var(--line-weight)*2), var(--line-color) calc(var(--line-weight)*2) calc(var(--line-weight)*4));
+}
+.agro-btn-line.top {
+  top: calc(var(--line-weight)*-0.5);
+  transform-origin: top left;
+  transform: rotate(5deg) scaleX(0);
+}
+.agro-btn-wrapper:has(.agro-btn:hover) .agro-btn-line.top {
+  animation: draw-top var(--animation-speed) ease-in-out forwards;
+  animation-delay: calc(var(--animation-speed)*0.8);
+}
+.agro-btn-line.bottom {
+  bottom: calc(var(--line-weight)*-0.5);
+  transform-origin: bottom right;
+  transform: rotate(5deg) scaleX(0);
+}
+.agro-btn-wrapper:has(.agro-btn:hover) .agro-btn-line.bottom {
+  animation: draw-bottom var(--animation-speed) ease-in-out forwards;
+  animation-delay: calc(var(--animation-speed)*2);
+}
+.agro-btn-line.left {
+  left: calc(var(--line-weight)*-0.5);
+  transform-origin: bottom left;
+  transform: scaleY(0);
+}
+.agro-btn-wrapper:has(.agro-btn:hover) .agro-btn-line.left {
+  animation: draw-left var(--animation-speed) ease-in-out forwards;
+  animation-delay: calc(var(--animation-speed)*2.4);
+}
+.agro-btn-line.right {
+  right: calc(var(--line-weight)*-0.5);
+  transform-origin: top right;
+  transform: rotate(5deg) scaleY(0);
+}
+.agro-btn-wrapper:has(.agro-btn:hover) .agro-btn-line.right {
+  animation: draw-right var(--animation-speed) ease-in-out forwards;
+  animation-delay: calc(var(--animation-speed)*1.4);
+}
+@keyframes draw-top    { 100% { transform: rotate(0deg) scaleX(1); } }
+@keyframes draw-bottom { 100% { transform: rotate(0deg) scaleX(1); } }
+@keyframes draw-left   { 100% { transform: rotate(0deg) scaleY(1); } }
+@keyframes draw-right  { 100% { transform: rotate(0deg) scaleY(1); } }
